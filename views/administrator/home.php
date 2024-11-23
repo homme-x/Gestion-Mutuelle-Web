@@ -168,11 +168,6 @@ Accueil
 
                 ?>
 
-                <h3 class="text-white">Trésorerie</h3>
-                <h1 id="saving-amount-title">
-                    <?= $exercise ? $exercise->exerciseAmount() : 0 ?> XAF
-                </h1>
-
                 <h3 class="mb-3 text-white">Aucune session en activité</h3>
                 <button class="btn btn-primary <?= $model->hasErrors() ? 'in' : '' ?>" data-toggle="modal" data-target="#modalLRFormDemo">
                     <?php if ($exercise) : ?>

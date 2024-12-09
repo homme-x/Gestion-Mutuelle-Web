@@ -45,8 +45,8 @@ Aides
                     <div class="row">
                         <?php
                         foreach ($activeHelps as $help):
-                            $user = $help->member()->user();
-                            $helpType = $help->helpType();
+                            $user = $help->member->user;
+                            $helpType = $help->helpType;
                             ?>
                             <div class="col-md-4">
                                 <!-- Card -->
@@ -59,7 +59,7 @@ Aides
                                             <h2><?= $help->amount ?> XAF</h2>
                                             <p >Contribution : <?= $help->unit_amount ?> XAF / membre</p>
                                             <hr class="bg-white p-0 m-0 my-1">
-                                            <h2><?= $help->contributedAmount() ?> XAF</h2>
+                                            <h2><?= $help->contributedAmount ?: 0 ?> XAF</h2>
                                             <h5 class="blue-text"><i class="fas fa-user"></i> <?= $user->name." ".$user->first_name ?></h5>
                                             <p class="card-title"><strong><?= $helpType->title ?></strong></p>
                                             <a class="btn btn-primary" href="<?= Yii::getAlias("@member.help_details")."?q=".$help->id ?>"><i class="fas fa-clone left"></i> Details</a>

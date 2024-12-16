@@ -54,35 +54,41 @@ $refunds = \app\models\Refund::find()->where(['is not','exercise_id',null])->all
                             </tr>
 
 
-                        <div class="modal fade" id="modalS<?= $member->id?>" tabindex="-1" role="dialog"
-                             aria-labelledby="myModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
+                    <div class="modal fade" id="modalS<?= $member->id ?>" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel"
+                    aria-hidden="true">
+                         <div class="modal-dialog" role="document">
+                            <div class="modal-content">
 
+                            <?php
+                            $model = new \app\models\forms\FixInscriptionForm();
+            $form = \yii\widgets\ActiveForm::begin([
+                'errorCssClass' => 'text-secondary',
+                'method' => 'post',
+                'action' => ['@administrator.fix_inscription', 'id' => $member->id],
+                'options' => [
+                    'class' => 'col-12 white-block',
+                    'data-current-amount' => $member->social_crown,
+                    'data-max-amount' => \app\managers\SettingManager::getInscription() - $member->social_crown,
+                ],
+            ]);
+            ?>
 
-                                    <?php                                    $model = new  \app\models\forms\FixInscriptionForm();
+            <h3>Veuillez entrer le montant à payer</h3>
+            <?= $form->field($model, 'amount')->input('number', [
+                'required' => 'required',
+                'min' => 1,
+                'max' => \app\managers\SettingManager::getInscription() - $member->social_crown,
+            ])->label("Montant") ?>
+            <?= $form->field($model, 'id')->hiddenInput(['value' => $member->id])->label(false) ?>
+            <div class="form-group text-right">
+                <button type="submit" class="btn btn-primary">Valider</button>
+            </div>
+            <?php \yii\widgets\ActiveForm::end(); ?>
 
-                                     $form = \yii\widgets\ActiveForm::begin([
-                                'errorCssClass' => 'text-secondary',
-                                'method' => 'post',
-                                'action' => ['@administrator.fix_inscription', 'id'=>$member->id],
-                                'options' => ['class' => 'col-12 white-block']
-                                ]) ?>
-
-                            <h3> Veuillez entrer le montant à payer</h3>
-                                <?= $form->field($model, 'amount')->input('number', ['required' => 'required', 'min' =>1])->label("montant") ?>
-                                <?= $form->field($model,'id')->hiddenInput(['value'=>$member->id])->label(false) ?>
-                            <div class="form-group text-right">
-                                <button type="submit" class="btn btn-primary" >valider </button>
-                                
-                            </div>
-                            <?php \yii\widgets\ActiveForm::end(); ?>
-
-                                    
-                                </div>
-                            </div>
-                        </div>
+        </div>
+    </div>
+</div>
 
                     <?php endforeach; ?>
                     </tbody>
@@ -252,3 +258,19 @@ $refunds = \app\models\Refund::find()->where(['is not','exercise_id',null])->all
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('form[data-max-amount]').forEach(form => {
+            form.addEventListener('submit', event => {
+                const input = form.querySelector('input[name="FixInscriptionForm[amount]"]');
+                const maxAmount = parseInt(form.dataset.maxAmount, 10);
+
+                if (parseInt(input.value, 10) > maxAmount) {
+                    event.preventDefault();
+                    alert(`Le montant saisi dépasse le montant restant (${maxAmount} XAF). Veuillez corriger.`);
+                }
+            });
+        });
+    });
+</script>

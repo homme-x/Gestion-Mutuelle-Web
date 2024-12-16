@@ -33,6 +33,15 @@ $this->title = "Mutuelle - ENSPY";
 
             }
 
+            ul li {
+            padding: 5px;
+            margin: 5px;
+            border-radius: 50px;
+            border-width: 2px;
+            background-color: whitesmoke;
+            color: black;
+            }
+
             .side-wrapper {
                 display: flex;
                 flex-direction: column;
@@ -60,7 +69,7 @@ $this->title = "Mutuelle - ENSPY";
     <!--Main Navigation-->
     <header>
         <!-- Navbar -->
-        <nav class="navbar fixed-top navbar-expand-lg navbar-light  scrolling-navbar">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light  scrolling-navbar blue-gradient">
             <div class="container-fluid">
 
                 <!-- Brand -->

@@ -137,8 +137,8 @@ $user = $member->user();
                 <tbody>
 
                 <?php foreach ($contributions as $index => $contribution): ?>
-                    <?php $help = $contribution->help();
-                    $administrator = $contribution->administrator();
+                    <?php $help = $contribution->help;
+                    $administrator = $contribution->administrator;
                     $administratorUser = $administrator?$administrator->user():null;
                     $helpType = $help->helpType();
 

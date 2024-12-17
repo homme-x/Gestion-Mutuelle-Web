@@ -63,7 +63,7 @@ class Contribution extends \yii\db\ActiveRecord
         ];
     }
 
-     /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAdministrator()
@@ -73,12 +73,11 @@ class Contribution extends \yii\db\ActiveRecord
     
     public function getHelp()
     {
-        return $this->hasOne(Help::class, ['id' => 'help_id']);
+        return $this->hasOne(Help::className(), ['id' => 'help_id']);
     }
     
     public function getMember()
     {
         return $this->hasOne(Member::class, ['id' => 'member_id']);
     }
-    
 }

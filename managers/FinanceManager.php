@@ -65,7 +65,6 @@ class FinanceManager
 
 
 
-
     public static function totalAgapeAmount(){
         $exercise = Exercise::findOne(['active' => true]);
         if ($exercise)
@@ -132,13 +131,13 @@ class FinanceManager
 
     public static function socialCrown() {
         $r = Member::find()->sum('social_crown');
-        // foreach (Help::find()->all() as $help) {
-        //     $r += $help->contributedAmount();
-        //     $r -= $help->amount;
-        // }
+        
+        foreach (Help::find()->all() as $help) {
+            $r += $help->contributedAmount();
+            $r -= $help->amount;
+        }
 
-        // return $r + self::totalInscriptionAmount();
-        return $r;
+        return $r + self::totalInscriptionAmount();
     }
 
 

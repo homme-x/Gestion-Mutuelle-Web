@@ -71,6 +71,17 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // Routes pour l'administrateur
+                'administrator/aides' => 'administrator/aides',
+                'administrator/details-aide' => 'administrator/details-aide',
+                'administrator/nouvelle-aide' => 'administrator/nouvelle-aide',
+                'administrator/ajouter-aide' => 'administrator/ajouter-aide',
+                'administrator/supprimer-aide' => 'administrator/supprimer-aide',
+                'administrator/modifier-aide' => 'administrator/modifier-aide',
+                'administrator/appliquer-modification-aide' => 'administrator/appliquer-modification-aide',
+                'administrator/nouvelle-contribution' => 'administrator/nouvelle-contribution',
+                'administrator/modifier-contribution' => 'administrator/modifier-contribution',
+                'administrator/appliquer-modification-contribution' => 'administrator/appliquer-modification-contribution',
                 '@administrator/update-agape/<id:\d+>' => 'administrator/update-agape',
             ],
         ],

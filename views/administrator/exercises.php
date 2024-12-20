@@ -57,6 +57,7 @@ Exercices
 
 </style>
 <?php $this->endBlock() ?>
+
 <div class="container mt-5 mb-5">
     <div class="row">
         <?php
@@ -65,10 +66,13 @@ Exercices
         $data = [];
         $colors = [];
         ?>
+
         <?php if(count($exercises)):?>
+
             <?php
             $exercise = $exercises[0];
             $members = \app\models\Member::find()->all();  ?>
+
             <div class="col-12 white-block mb-2">
                 <h1 class="text-muted text-center">Exercice de l'année <span class="blue-text"><?= $exercises[0]->year ?></span></h1>
                 <h3 class="text-secondary text-center"><?= $exercises[0]->active?"En cours":"Terminé" ?></h3>
@@ -92,6 +96,7 @@ Exercices
                     <?php
                     endif;
                     ?>
+
                     <div class="col-md-4 p-1 d-flex ">
                         <div class="white-block d-flex flex-row">
                             <div class="bl b-amount ml-4 mr-4">
@@ -147,8 +152,7 @@ Exercices
                             <th>Dette remboursée</th>
                             <th>Intérêt sur les dettes</th>
                             <th>Inscription</th>
-                            <th>Fond Social</th>
-                            <th>Renflouement</th>
+                            <th>renflouement</th>
 
                         </tr>
                         </thead>
@@ -174,7 +178,6 @@ Exercices
                                 <td><?= $refundedAmount?$refundedAmount:0 ?> XAF</td>
                                 <td class="blue-text"><?= $interest ?> XAF</td>
                                 <td class="blue-text"><?= $insc ?> XAF</td>
-                                <td class="blue-text"><?= $sc ?> XAF</td>
                                 <td class="blue-text"><?= \app\managers\SettingManager::getSocialCrown()-$sc ?> XAF</td>
                                 </tr>
                         <?php endforeach; ?>
@@ -202,11 +205,13 @@ Exercices
             </div>
 
         <?php else: ?>
+
             <div class="col-12 white-block">
                 <h1 class="text-center text-muted">Aucun exercice créé.</h1>
             </div>
 
         <?php endif; ?>
+
     </div>
 </div>
 
@@ -231,6 +236,7 @@ Exercices
     }
 
     ?>
+
     //line
     var ctxL = document.getElementById("lineChart").getContext('2d');
     var myLineChart = new Chart(ctxL, {
@@ -254,7 +260,6 @@ Exercices
             legend: false
         }
     });
-
 
 
     var ctxP = document.getElementById("pieChart").getContext('2d');

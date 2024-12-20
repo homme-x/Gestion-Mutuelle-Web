@@ -102,7 +102,7 @@ $helpType = $help->helpType();
                     <h4 class="text-primary">Montant de contribution individuelle: <?= $help->unit_amount ?> XAF / membre</h4>
                     <h4 class="text-secondary m-0 mt-4">Montant de contributions perçues : </h4>
                     <p class="contributed text-secondary"><?= ($t=$help->contributedAmount())?$t:0 ?> XAF</p>
-                    <p class="objective text-primary">deficit : <?= $help->deficit() ?> XAF</p>
+                    <p class="objective text-primary">Déficit : <?= $help->deficit ?> XAF</p>
                 </div>
             </div>
 
@@ -110,10 +110,9 @@ $helpType = $help->helpType();
                 <div class="col-12">
                     <h3 class="text-muted text-center">Détails</h3>
                     <?php
-                    $contributions = $help->contributions();
+                    $contributions = $help->contributions;
                     if (count($contributions)):
                     ?>
-
                         <table class="table table-hover">
                             <thead class="blue-grey lighten-4">
                             <tr>
@@ -128,17 +127,18 @@ $helpType = $help->helpType();
                             </thead>
                             <tbody>
                             <?php foreach ($contributions as $index => $contribution): ?>
-                                <?php $m = $contribution->getMember();
+                                <?php 
+                                $m = $contribution->getMember()->one();
                                 $u = $m->user();
-                                $administrator = $contribution->getAdministrator();
-                                $adminUser = $administrator->user();
+                                $administrator = $contribution->getAdministrator()->one();
+                                $adminUser = $administrator ? $administrator->user() : null;
                                 ?>
                                 <tr>
                                     <th scope="row"><?= $index + 1 ?></th>
                                     <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
                                     <td class="blue-text"><?= (new DateTime($contribution->date))->format("d-m-Y")  ?></td>
                                     <td class="blue-text"><?= $contribution->amount ?></td>
-                                    <td class="text-capitalize"><?= $adminUser->name. ' '.$adminUser->first_name ?></td>
+                                    <td class="text-capitalize"><?= $adminUser ? ($adminUser->name. ' '.$adminUser->first_name) : 'N/A' ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -150,21 +150,18 @@ $helpType = $help->helpType();
                     <?php
                     endif;
                     ?>
-
                     <?php
                     if ($help->state):
                     ?>
                         <h3 class="text-muted text-center mb-3">Membres n'ayant pas contribué</h3>
                         <div class="col-12 text-center">
-            
+
                         <div class="row">
                             <?php
-                            foreach ($help->waitedContributions() as $contribution ):
-                                $member = new Contribution();
-                            $member =$contribution->getMember();
-                            $user = $member->user();
+                            foreach ($help->waitedContributions as $contribution):
+                                $member = $contribution->member;
+                                $user = $member->user;
                             ?>
-
                             <div class="col-3">
                                 <div class="contribution">
                                     <img src="<?= \app\managers\FileManager::loadAvatar($user)?>" alt="<?= $user->name.' '.$user->first_name ?>">
@@ -220,36 +217,37 @@ foreach ($allActiveMembers as $key => $activeMem) {
 </thead>
 <tbody>
 <?php foreach ($allMembers as $index => $asMem): ?>
-    <?php $m = Contribution::find()->where(['member_id'=>$asMem->id,'help_id'=>$help->id])->one();
-    $u = $asMem->user();
-    $asAdmin = $asMem->administrator();
-    $asAdminUser = $asAdmin->user();
-    $mleft = $help->unit_amount - $m->amount;
-    $mAmount = $m->amount;
-    $mStatus = ($mleft>=0)? true: false ;
-    $params = [
-        'q'=>$help->id,
-        'm'=>$m->member_id,
-    ]
+    <?php 
+    $m = Contribution::find()->where(['member_id'=>$asMem->id,'help_id'=>$help->id])->one();
+    if ($m) {
+        $u = $asMem->user();  
+        $asAdmin = $asMem->administrator();
+        $asAdminUser = $asAdmin ? $asAdmin->user() : null;
+        $mleft = $help->unit_amount - $m->amount;
+        $mAmount = $m->amount;
+        $mStatus = ($mleft>=0)? true: false;
+        $params = [
+            'q'=>$help->id,
+            'm'=>$asMem->id,
+        ];
     ?>
-    <tr>
-        <th scope="row"><?= $index + 1 ?></th>
-        <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
-        <td class="text-capitalize"><?= $asMem->active? 'actif' : 'non-actif' ?></td>
-        <td class="blue-text"><?= (new DateTime($m->date))->format("d-m-Y")  ?></td>
-        <td class="text-capitalize"><?= $m->amount ?></td>
-        <td class="text-capitalize"><?=$mStatus? $help->unit_amount - $m->amount : "already full"?></td>
-        <td class="text-capitalize">
-            <?= $m->member_id.'-'. $help->id?>
-            <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$m->member_id.http_build_query($params) ?>" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>contribuer</a>
-            <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$m->member_id.http_build_query($params) ?>" class="btn btn-danger btn-sm">annuler</a>
-
-    </td>
-        <!-- <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$help->member_id.http_build_query($params) ?>" class="btn btn-primary btn-add"><i class="fas fa-plus"></i>Ajouter une nouvelle contribution</a> -->
-
-        <td class="text-capitalize"><?= $asAdminUser->name. ' '.$asAdminUser->first_name ?></td>
-    </tr>
-<?php endforeach; ?>
+        <tr>
+            <th scope="row"><?= $index + 1 ?></th>
+            <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
+            <td class="text-capitalize"><?= $asMem->active? 'actif' : 'non-actif' ?></td>
+            <td class="blue-text"><?= (new DateTime($m->date))->format("d-m-Y")  ?></td>
+            <td class="text-capitalize"><?= $mAmount ?></td>
+            <td class="text-capitalize"><?= $mStatus? $mleft : "already full" ?></td>
+            <td class="text-capitalize">
+                <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&m=".$asMem->id."&".http_build_query($params) ?>" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>contribuer</a>
+                <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&m=".$asMem->id."&".http_build_query($params) ?>" class="btn btn-danger btn-sm">annuler</a>
+            </td>
+            <td class="text-capitalize"><?= $asAdminUser ? ($asAdminUser->name. ' '.$asAdminUser->first_name) : 'N/A' ?></td>
+        </tr>
+    <?php 
+    }
+    endforeach; 
+    ?>
 </tbody>
 </table>
 

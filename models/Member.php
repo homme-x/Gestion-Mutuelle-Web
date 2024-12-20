@@ -16,7 +16,7 @@ class Member extends ActiveRecord
 {
 
     public function user() {
-        return $this->getUser()->one();
+        return User::findOne($this->user_id);
     }
 
     public function getUser()
@@ -60,7 +60,7 @@ class Member extends ActiveRecord
     // public function interest(Exercise $exercise) {
     //     $sessions = Session::find()->select('id')->where(['exercise_id' => $exercise->id])->column();
     //     $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
-    //     $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all
+    //     $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
 
 
     //     $sum = 0;
@@ -77,6 +77,7 @@ class Member extends ActiveRecord
         $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
         $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
 
+
         $sum = 0;
         foreach($borrowingSavings as $borrowingSaving){
             $percent = $borrowingSaving->percent;
@@ -87,11 +88,6 @@ class Member extends ActiveRecord
     }
 
     public function administrator() {
-        return $this->getAdministrator()->one();
-    }
-
-    public function getAdministrator()
-    {
-        return $this->hasOne(Administrator::class, ['id' => 'administrator_id']);
+        return Administrator::findOne($this->administrator_id);
     }
 }

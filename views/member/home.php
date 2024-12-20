@@ -41,9 +41,10 @@ Accueil
                 ?>
                     <?php
                     foreach ($helps as $help):
-                        $member = $help->member();
-                        $user = $member->user();
-                        $helpType = $help->helpType();
+                        $member = $help->member;
+                        $user = $member->user;
+                        $helpType = $help->helpType;
+                        
                     ?>
                         <div class="media">
                             <img class="d-flex mr-3" width="60" height="60" src="<?= \app\managers\FileManager::loadAvatar($user)?>" alt="Generic placeholder image">
@@ -53,7 +54,7 @@ Accueil
                                 <br>
                                 <?= $help->comments ?>
                                 <br>
-                                <span style="font-size: 1.5rem" class="text-secondary"><?= ($t=$help->contributedAmount())?$t:0?> / <?= $help->amount?>  XAF</span>
+                                <span style="font-size: 1.5rem" class="text-secondary"><?= $help->getContributedAmount() ?: 0 ?> / <?= $help->amount?>  XAF</span>
                                 <div class="text-right">
                                     <a href="<?= Yii::getAlias("@member.help_details")."?q=".$help->id?>" class="btn btn-primary p-2">Details</a>
                                 </div>

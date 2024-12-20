@@ -432,101 +432,34 @@ class MemberController extends Controller
     {
         MemberSessionManager::setHome("tontine");
         $model = new NewTontineForm();
-        return $this->render("new_Tontine", compact("model"));
+        return $this->render('new_tontine', [
+            'model' => $model,
+        ]);
     }
 
 
 /********************************ajouter une tontine ********************************************************** */
     public function actionAjouterTontine()
     {
-        if (!Yii::$app->request->getIsPost()) {
-            return RedirectionManager::abort($this);
-        }
-
         $model = new NewTontineForm();
-        if (!$model->load(Yii::$app->request->post()) || !$model->validate()) {
-            return $this->render("new_tontine", compact("model"));
-        }
-
-        $member = Member::findOne($model->member_id);
-        $tontine_type = TontineType::findOne($model->tontine_type_id);
-
-        if (!$member || !$tontine_type || !$member->active) {
-            return RedirectionManager::abort($this);
-        }
-
-        if ($this->hasActiveBorrowing($member->id)) {
-            $model->addError("member_id", "Ce membre doit rembourser son emprunt avant de bénéficier d'une aide.");
-            return $this->render("new_tontine", compact("model"));
-        }
-
-        if (!$this->isDateValid($model->limit_date)) {
-            $model->addError("limit_date", "Le délai minimum est d'un mois.");
-            return $this->render("new_tontine", compact("model"));
-        }
-
-        $tontine = $this->createTontine($model, $tontine_type, $member);
-        $this->sendNotifications($tontine, $member, $tontine_type);
-
-        // Set the success flash message
-        Yii::$app->session->setFlash('success', 'Vous avez été ajoutée a la tontine avec succès.');
-
-        return $this->redirect("@member.tontine_types");
-    }
-
-    private function hasActiveBorrowing($member_id)
-    {
-        return Borrowing::findOne(['member_id' => $member_id, 'state' => true]) !== null;
-    }
-    
-    private function isDateValid($limit_date)
-    {
-        $currentTimestamp = (new DateTime())->getTimestamp();
-        $limitTimestamp = (new DateTime($limit_date))->getTimestamp();
-        return $currentTimestamp <= $limitTimestamp + 86400000 * 30;
-    }
-    
-    private function createTontine($model, $tontine_type, $member)
-    {
-        $tontine = new Tontine();
-        $tontine->limit_date = $model->limit_date;
-        $tontine->tontine_type_id = $tontine_type->id;
-        $tontine->member_id = $member->id;
-        $tontine->comments = $model->comments;
-        $tontine->state = true;
-        $tontine->administrator_id = 1;
-
-        $members = Member::find()->where(['!=', 'id', $member->id])->andWhere(['active' => true])->all();
-        $unit_amount = (int) ceil((double) ($tontine_type->amount) / count($members));
-        $tontine->amount = $unit_amount * count($members);
-        $tontine->unit_amount = $unit_amount;
-        $tontine->save();
-
-        foreach ($members as $member) {
-            $contribution = new ContributionTontine();
-            $contribution->state = false;
-            $contribution->member_id = $member->id;
-            $contribution->tontine_id = $tontine->id;
-            $contribution->save();
-        }
-
-        return $tontine;
-    }
-    
-    private function sendNotifications($tontine, $member, $tontine_type)
-    {
-        $help = Help::findOne(['member_id' => $member->id]);
-        if ($help !== null) {
-            MailManager::alert_contributeur($member->user(), $member, $help);
-        }
-
-        $members = Member::find()->where(['!=', 'id', $tontine->member_id])->andWhere(['active' => true])->all();
-        foreach ($members as $member) {
-            MailManager::alert_new_tontine($member->user(), $member, $tontine, $tontine_type);
-            if ($help !== null) {
-                MailManager::alert_contributeur($member->user(), $member, $help);
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $tontine = new Tontine();
+            $tontine->member_id = $model->member_id;
+            $tontine->tontine_type_id = $model->tontine_type_id;
+            $tontine->comments = $model->comments;
+            $tontine->limit_date = $model->limit_date;
+            $tontine->created_at = date('Y-m-d H:i:s');
+            $tontine->state = true;
+            
+            if ($tontine->save()) {
+                Yii::$app->session->setFlash('success', 'Votre inscription à la tontine a été enregistrée avec succès.');
+                return $this->redirect(['member/tontine-types']);
             }
         }
+        
+        Yii::$app->session->setFlash('error', 'Une erreur est survenue lors de l\'enregistrement de votre inscription.');
+        return $this->redirect(['member/tontine-types']);
     }
 
 }

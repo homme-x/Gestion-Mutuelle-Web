@@ -15,7 +15,8 @@ class RouteManager {
         'guest.administrator_form' => '/guest/administrator-form',
 
         // ============================ ESPACE ADMINISTRATEUR ==========================
-//ici c'est les routes pour l'espace administrateur
+
+
         'administrator.home' => '/administrator/accueil',
         'administrator.disconnection' => '/administrator/deconnexion',
         'administrator.members' => '/administrator/membres',
@@ -42,6 +43,7 @@ class RouteManager {
 
 
 
+
         'administrator.help_types' => '/administrator/types-aide',
         'administrator.new_help_type' => '/administrator/nouveau-type-aide',
         'administrator.update_help_type' => '/administrator/modifier-type-aide',
@@ -54,6 +56,7 @@ class RouteManager {
         'administrator.new_saving'=> '/administrator/nouvelle-epargne',
         'administrator.borrowings' => '/administrator/emprunts',
         'administrator.new_borrowing' => '/administrator/nouvelle-emprunt',
+        'administrator.helps' => '/administrator/aides',
         'administrator.sessions' => '/administrator/sessions',
         'administrator.delete_session' => '/administrator/supprimer-session',
         'administrator.update_session' => '/administrator/modifier-session',
@@ -79,24 +82,22 @@ class RouteManager {
         'administrator.borrowing_member' => '/administrator/emprunt-membre',
         'administrator.borrowings_details' => '/administrator/emprunt-detail',
         'administrator.contribution_member' => '/administrator/contribution-membre',
+        'administrator.contribution_member' => '/administrator/contribution-membre',
+
 
         'administrator.new_administrator' => '/administrator/nouvel-administrateur',
         'administrator.add_administrator' => '/administrator/ajouter-administrateur',
 
-        // Routes pour la gestion des aides
-        'administrator.helps' => '/administrator/aides',
-        'administrator.help_details' => '/administrator/details-aide',
         'administrator.new_help' => '/administrator/nouvelle-aide',
         'administrator.add_help' => '/administrator/ajouter-aide',
+
+        'administrator.help_details' => '/administrator/details-aide',
+
         'administrator.new_contribution' => '/administrator/nouvelle-contribution',
         'administrator.new_contribution_tontine' => '/administrator/nouvelle-contribution-tontine',
         'administrator.add_contribution' => '/administrator/ajouter-contribution',
         'administrator.add_contribution_tontine' => '/administrator/ajouter-contribution-tontine',
         'administrator.delete_help' => '/administrator/supprimer-aide',
-        'administrator.update_help' => '/administrator/modifier-aide',
-        'administrator.apply_help_update' => '/administrator/appliquer-modification-aide',
-        'administrator.update_contribution' => '/administrator/modifier-contribution',
-        'administrator.apply_contribution_update' => '/administrator/appliquer-modification-contribution',
 
         'administrator.disable_member' => '/administrator/desactiver-membre',
         'administrator.enable_member' => '/administrator/activer-membre',

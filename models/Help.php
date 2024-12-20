@@ -1,34 +1,29 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: medric
- * Date: 27/12/18
- * Time: 20:42
- */
 
 namespace app\models;
-
 use yii\db\ActiveRecord;
+use app\models\Member;
+use app\models\Contribution;
+use app\models\Help_type;
 
 class Help extends ActiveRecord
 {
-    /**
-     * @return string
-     */
     public static function tableName()
     {
         return 'help';
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getContributions()
+    public function rules()
     {
-        return $this->hasMany(Contribution::class, ['help_id' => 'id']);
+        return [
+            [['member_id', 'help_type_id', 'amount'], 'required'],
+            [['member_id', 'help_type_id'], 'integer'],
+            [['amount'], 'number'],
+        ];
     }
 
     /**
+     * Relation avec le membre
      * @return \yii\db\ActiveQuery
      */
     public function getMember()
@@ -37,43 +32,87 @@ class Help extends ActiveRecord
     }
 
     /**
+     * Relation avec le type d'aide
      * @return \yii\db\ActiveQuery
      */
     public function getHelpType()
     {
-        return $this->hasOne(HelpType::class, ['id' => 'help_type_id']);
+        return $this->hasOne(Help_type::class, ['id' => 'help_type_id']);
     }
 
     /**
+     * Relation avec les contributions
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContributions()
+    {
+        return $this->hasMany(Contribution::class, ['help_id' => 'id']);
+    }
+
+    /**
+     * Méthode d'accès rapide au membre
+     * @return Member|null
+     */
+    public function member()
+    {
+        return $this->getMember()->one();
+    }
+
+    /**
+     * Méthode d'accès rapide au type d'aide
+     * @return Help_type|null
+     */
+    public function helpType()
+    {
+        return $this->getHelpType()->one();
+    }
+
+    /**
+     * Contributions en attente
      * @return \yii\db\ActiveQuery
      */
     public function getWaitedContributions()
     {
-        return $this->hasMany(Contribution::class, ['help_id' => 'id'])
-            ->where(['state' => false]);
+        return $this->getContributions()->where(['state' => false]);
     }
 
-    public function contributions() {
-        return $this->getContributions()->all();
+    /**
+     * Calcul du montant total des contributions pour cette aide
+     * @return float
+     */
+    public function getContributedAmount()
+    {
+        return Contribution::find()
+            ->where(['help_id' => $this->id, 'state' => true])
+            ->sum('amount') ?: 0;
     }
 
-    public function waitedContributions() {
-        return $this->getWaitedContributions()->all();
+    /**
+     * Définition de la propriété contributedAmount
+     * @return float
+     */
+    public function getContributedAmountAttribute()
+    {
+        // Logique pour calculer ou retourner la valeur
+        return $this->amount; // Exemple de retour, à adapter selon votre logique
     }
 
-    public function contributedAmount() {
-        return $this->getContributions()->sum('amount');
+    /**
+     * Calcul du montant restant à contribuer
+     * @return float
+     */
+    public function remainingAmount()
+    {
+        $helpType = $this->helpType();
+        return $helpType ? ($helpType->amount - $this->getContributedAmount()) : 0;
     }
 
-    public function deficit() {
-        return $this->amount - $this->contributedAmount();
-    }
-
-    public function member() {
-        return $this->getMember()->one();
-    }
-
-    public function helpType() {
-        return $this->getHelpType()->one();
+    /**
+     * Calcul du déficit
+     * @return float
+     */
+    public function getDeficit()
+    {
+        return $this->amount - $this->getContributedAmount();
     }
 }

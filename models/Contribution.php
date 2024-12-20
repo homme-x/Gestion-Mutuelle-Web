@@ -70,18 +70,12 @@ class Contribution extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Administrator::class, ['id' => 'administrator_id']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getHelp()
     {
-        return $this->hasOne(Help::class, ['id' => 'help_id']);
+        return $this->hasOne(Help::className(), ['id' => 'help_id']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getMember()
     {
         return $this->hasOne(Member::class, ['id' => 'member_id']);

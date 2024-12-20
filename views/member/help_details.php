@@ -54,9 +54,9 @@ $this->beginBlock('title') ?>
     </style>
 <?php $this->endBlock() ?>
 <?php
-$member = $help->member();
-$user = $member->user();
-$helpType = $help->helpType();
+$member = $help->member;  // Sans parenthèses
+$user = $member ? $member->user : null;  // Vérification de l'existence de $member
+$helpType = $help->helpType;
 ?>
 <div class="container mb-5 mt-5">
     <div class="row">
@@ -66,19 +66,18 @@ $helpType = $help->helpType();
                 <div class="col-md-4 text-center">
                     <h3 class="mb-2">Membre</h3>
                     <div class="img-container mb-2">
-                        <img src="<?= \app\managers\FileManager::loadAvatar($user,"512") ?>" alt="">
+                        <img src="<?= $user ? \app\managers\FileManager::loadAvatar($user,"512") : 'default-avatar.jpg' ?>" alt="">
                     </div>
-                    <h2 class="text-primary"><?= $user->name." ".$user->first_name ?></h2>
-
+                    <h2 class="text-primary"><?= $user ? $user->name." ".$user->first_name : 'Utilisateur non trouvé' ?></h2>
                 </div>
                 <div class="col-md-8 text-center">
                     <h4 class="text-center text-muted"><?= $helpType->title ?></h4>
                     <p class="comments text-left"><?= $help->comments ?></p>
-                    <h6 >Créée le : <?= $help->created_at ?></h6>
+                    <h6>Créée le : <?= $help->created_at ?></h6>
                     <p class="objective text-primary">Montant de l'aide : <?= $help->amount ?> XAF</p>
                     <h4 class="text-primary">Montant contribution : <?= $help->unit_amount ?> XAF / membre</h4>
                     <h4 class="text-secondary m-0 mt-4">Montant contributions perçus : </h4>
-                    <p class="contributed text-secondary"><?= ($t=$help->contributedAmount())?$t:0 ?> XAF</p>
+                    <p class="contributed text-secondary"><?= $help->getContributedAmount() ?: 0 ?> XAF</p>
                 </div>
             </div>
 
@@ -86,7 +85,7 @@ $helpType = $help->helpType();
                 <div class="col-12">
                     <h3 class="text-muted text-center">Détails</h3>
                     <?php
-                    $contributions = $help->contributions();
+                    $contributions = $help->contributions;
                     if (count($contributions)):
                     ?>
 
@@ -102,16 +101,17 @@ $helpType = $help->helpType();
                             </thead>
                             <tbody>
                             <?php foreach ($contributions as $index => $contribution): ?>
-                                <?php $m = $contribution->member();
-                                $u = $m->user();
-                                $administrator = $contribution->administrator();
-                                $adminUser = $administrator->user();
+                                <?php 
+                                $m = $contribution->member;
+                                $u = $m ? $m->user : null; // Vérification si member existe
+                                $administrator = $contribution->administrator;
+                                $adminUser = $administrator ? $administrator->user : null; // Vérification de l'administrateur
                                 ?>
                                 <tr>
                                     <th scope="row"><?= $index + 1 ?></th>
-                                    <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
+                                    <td class="text-capitalize"><?= $u ? $u->name . " " . $u->first_name : 'Membre non trouvé' ?></td>
                                     <td class="blue-text"><?= (new DateTime($contribution->date))->format("d-m-Y")  ?></td>
-                                    <td class="text-capitalize"><?= $adminUser->name. ' '.$adminUser->first_name ?></td>
+                                    <td class="text-capitalize"><?= $adminUser ? $adminUser->name . ' ' . $adminUser->first_name : 'Administrateur inconnu' ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -130,15 +130,15 @@ $helpType = $help->helpType();
                         <h3 class="text-muted text-center mb-3">Membres n'ayant pas contribué</h3>
                         <div class="row">
                             <?php
-                            foreach ($help->waitedContributions() as $contribution ):
-                            $member =$contribution->member();
-                            $user = $member->user();
+                            foreach ($help->waitedContributions as $contribution ):
+                            $member = $contribution->member;
+                            $user = $member ? $member->user() : null; // Vérification de membre et user
                             ?>
 
                             <div class="col-3">
                                 <div class="contribution">
-                                    <img src="<?= \app\managers\FileManager::loadAvatar($user)?>" alt="<?= $user->name.' '.$user->first_name ?>">
-                                    <span><?= $user->name.' '.$user->first_name ?></span>
+                                    <img src="<?= $user ? \app\managers\FileManager::loadAvatar($user) : 'default-avatar.jpg' ?>" alt="<?= $user ? $user->name.' '.$user->first_name : 'Utilisateur inconnu' ?>">
+                                    <span><?= $user ? $user->name.' '.$user->first_name : 'Utilisateur inconnu' ?></span>
                                 </div>
                             </div>
 

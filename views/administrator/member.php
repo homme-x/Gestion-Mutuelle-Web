@@ -99,7 +99,6 @@ $user = $member->user();
                     <?php
                     else:
                     ?>
-
                         <a href="<?= Yii::getAlias("@administrator.enable_member")."?q=".$member->id ?>" class="btn btn-primary p-2">Activer le membre</a>
                     <?php
                     endif;
@@ -129,6 +128,8 @@ $user = $member->user();
                 </div>
                 
 
+
+
     
             </div>
         </div>
@@ -154,38 +155,21 @@ $user = $member->user();
             <?php
             $exercises = \app\models\Exercise::find()->orderBy("created_at",SORT_ASC)->all();
             ?>
-
             <?php if ( count($exercises)):?>
-
                 <table class="table table-hover">
                     <thead class="blue-grey lighten-4">
                     <tr>
                         <th>Année</th>
-                        <th>Montant épargné</th>
-                        <th>Montant emprunté</th>
-                        <th>Montant remboursé</th>
-                        <th>Intérêt</th>
-                        <th>Total obtenu</th>
+                        <th>Montant d'inscription</th>
+                        <th>Fonds social</th>
                     </tr>
-
                     </thead>
                     <tbody>
                     <?php foreach ($exercises as $index => $exercise): ?>
-                        <?php
-                        $savedAmount = $member->savedAmount($exercise);
-                        $borrowingAmount = $member->borrowedAmount($exercise);
-                        $refundedAmount = $member->refundedAmount($exercise);
-                        $interest = $member->interest($exercise);
-
-                        $total = $savedAmount+$interest;
-                        ?>
                         <tr>
                             <th scope="row"><?= $exercise->year ?></th>
-                            <td><?= $savedAmount?$savedAmount:0 ?> XAF</td>
-                            <td><?= $borrowingAmount?$borrowingAmount:0 ?> XAF</td>
-                            <td><?= $refundedAmount?$refundedAmount:0 ?> XAF</td>
-                            <td><?= $interest?(int)$interest:0 ?> XAF</td>
-                            <td class="blue-text"><?= $exercise->active?"###": ((int)$total .' XAF') ?></td>
+                            <td><?= number_format($member->getRegistrationAmount($exercise), 0, ',', ' ') ?> XAF</td>
+                            <td><?= number_format($member->getSocialFundAmount($exercise), 0, ',', ' ') ?> XAF</td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

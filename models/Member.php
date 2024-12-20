@@ -8,7 +8,6 @@
 
 namespace app\models;
 
-
 use app\managers\FinanceManager;
 use yii\db\ActiveRecord;
 
@@ -57,34 +56,51 @@ class Member extends ActiveRecord
         return Refund::find()->where(['borrowing_id' => $borrowings ])->sum("amount");
     }
 
-    // public function interest(Exercise $exercise) {
-    //     $sessions = Session::find()->select('id')->where(['exercise_id' => $exercise->id])->column();
-    //     $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
-    //     $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
-
-
-    //     $sum = 0;
-    //     foreach($borrowingSavings as $borrowingSaving){
-    //         $percent = $borrowingSaving->percent;
-    //         $borrowing = Borrowing::findOne($borrowingSaving->borrowing_id);
-    //         $sum += ($percent/100.0)* (FinanceManager::intendedAmountFromBorrowing($borrowing)-$borrowing->amount );
-    //     }
-    //     return $sum;
-    // }
+    public function calculateTotalBorrowingSavings($borrowingSavings)
+    {
+        $sum = 0;
+        foreach($borrowingSavings as $borrowingSaving){
+            if (isset($borrowingSaving->percent)) {
+                $percent = $borrowingSaving->percent;
+                $borrowing = Borrowing::findOne($borrowingSaving->borrowing_id);
+                if ($borrowing) {
+                    $intendedAmount = FinanceManager::intendedAmountFromBorrowing($borrowing);
+                    if (is_numeric($intendedAmount) && is_numeric($borrowing->amount)) {
+                        $sum += ($percent / 100.0) * ($intendedAmount - $borrowing->amount);
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
 
     public function interest(Exercise $exercise) {
         $sessions = Session::find()->select('id')->where(['exercise_id' => $exercise->id])->column();
         $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
         $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
+        return $this->calculateTotalBorrowingSavings($borrowingSavings);
+    }
 
+    /**
+     * Récupère le montant d'inscription pour un exercice donné
+     * @param Exercise $exercise
+     * @return float|int
+     */
+    public function getRegistrationAmount($exercise)
+    {
+        $registration = Registration::findOne(['member_id' => $this->id, 'exercise_id' => $exercise->id]);
+        return $registration ? $registration->amount : 0;
+    }
 
-        $sum = 0;
-        foreach($borrowingSavings as $borrowingSaving){
-            $percent = $borrowingSaving->percent;
-            $borrowing = Borrowing::findOne($borrowingSaving->borrowing_id);
-            $sum += ($percent/100.0)* (FinanceManager::intendedAmountFromBorrowing($borrowing)-$borrowing->amount );
-        }
-        return $sum;
+    /**
+     * Récupère le montant du fonds social pour un exercice donné
+     * @param Exercise $exercise
+     * @return float|int
+     */
+    public function getSocialFundAmount($exercise)
+    {
+        $socialFund = SocialFund::findOne(['member_id' => $this->id, 'exercise_id' => $exercise->id]);
+        return $socialFund ? $socialFund->amount : 0;
     }
 
     public function administrator() {

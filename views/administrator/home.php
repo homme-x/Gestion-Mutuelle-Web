@@ -24,7 +24,6 @@ Accueil
     }
 </style>
 <?php $this->endBlock() ?>
-
 <div class="container mt-5 mb-5">
     <div class="row mb-2">
         <div class="col-12 white-block text-center blue-gradient ">
@@ -60,7 +59,6 @@ Accueil
                         $monthNumber = Yii::$app->formatter->asDate($session->date, 'MM');
                         $monthName = $monthNames[$monthNumber];
                         ?>
-
                         Session du <?= Yii::$app->formatter->asDate($session->date, 'd')?> <?= $monthName ?>
                     </h4>
                         <div class="col-9 text-right">
@@ -114,7 +112,6 @@ Accueil
                                         'action' => ['@administrator.update_session', 'id' => $session->id],
                                         'options' => ['class' => 'modal-body']
                                     ]) ?>
-
                                     <?= $form->field($model, 'date')->input('date', ['required' => 'required', "value" => $session-> date])->label("Date de la rencontre de la session actuelle") ?>
                                     <div class="form-group text-right">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
@@ -159,15 +156,12 @@ Accueil
                             </div>
                         </div>
                     <?php endif; ?>
-
                 <?php endif; ?>
             <?php else : ?>
-
                 <?php
                 $exercise = \app\models\Exercise::findOne(['active' => true]);
 
                 ?>
-
                 <h3 class="mb-3 text-white">Aucune session en activité</h3>
                 <button class="btn btn-primary <?= $model->hasErrors() ? 'in' : '' ?>" data-toggle="modal" data-target="#modalLRFormDemo">
                     <?php if ($exercise) : ?>
@@ -186,17 +180,15 @@ Accueil
                                 'action' => '@administrator.new_session',
                                 'options' => ['class' => 'modal-body']
                             ]) ?>
-
                             <?php if (!$exercise) : ?>
                                 <?= $form->field($model, 'year')->input('text', [
                                     'required' => 'required',
                                     'readonly' => 'readonly',
                                     'value' => date('Y')
-                                ]) ?><?= $form->field($model, 'interest')->input('number', ['required' => 'required', 'step' => '0.01'])->label("Taux d'intérêt (%)") ?>
+                                ]) ?>
+                                <?= $form->field($model, 'interest')->input('number', ['required' => 'required', 'step' => '0.01'])->label("Taux d'intérêt (%)") ?>
                             <?php endif; ?>
-
                             <?= $form->field($model, 'date')->input('date', ['required' => 'required'])->label("Date de la rencontre de la première session") ?>
-
                             <div class="form-group text-right">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
                                 <button type="submit" class="btn btn-primary">
@@ -208,7 +200,6 @@ Accueil
                                 </button>
                             </div>
                             <?php \yii\widgets\ActiveForm::end(); ?>
-
                         </div>
                     </div>
                 </div>
@@ -217,11 +208,6 @@ Accueil
     </div>
     <div class="row">
         <?php
-
-        ?>
-
-        <?php
-
         ?>
         <div class="col-md-12  pr-4">
             <div class="row">
@@ -250,7 +236,7 @@ Accueil
                                     <br>
                                     <?= $help->comments ?>
                                     <br>
-                                    <span style="font-size: 1.5rem" class="text-secondary"><?= ($t = $help->contributedAmount()) ? $t : 0 ?> / <?= $help->amount ?> XAF</span>
+                                    <span style="font-size: 1.5rem" class="text-secondary"><?= ($t = $help->getContributedAmount()) ? $t : 0 ?> / <?= $help->amount ?> XAF</span>
                                     <div class="text-right">
                                         <a href="<?= Yii::getAlias("@administrator.help_details") . "?q=" . $help->id ?>" class="btn btn-primary p-2">Détails</a>
                                     </div>
@@ -260,7 +246,6 @@ Accueil
                         <?php
                         endforeach;
                         ?>
-
                     <?php
                     else :
                     ?>
@@ -305,7 +290,6 @@ Accueil
                         <?php
                         endforeach;
                         ?>
-
                     <?php
                     else :
                     ?>
@@ -329,8 +313,6 @@ Accueil
         <?php
         if ($session) :
         ?>
-
-
             <?php
             $borrowings = $exercise->borrowings();
             ?>
@@ -374,13 +356,10 @@ Accueil
             <?php
             endif;
             ?>
-
         <?php
         endif;
         ?>
     </div>
-
-
 
 
 </div>

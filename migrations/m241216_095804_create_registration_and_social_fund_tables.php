@@ -32,9 +32,9 @@ class m241216_095804_create_registration_and_social_fund_tables extends Migratio
 
         // Add indexes
         $this->createIndex('idx-registration-member_id', 'registration', 'member_id');
-        $this->createIndex('idx-registration-exercise_id', 'registration', 'exercise_id');
+        // $this->createIndex('idx-registration-exercise_id', 'registration', 'exercise_id'); // Commenté car exercise_id n'existe pas
+        // $this->createIndex('idx-social_fund-exercise_id', 'social_fund', 'exercise_id'); // Commenté car exercise_id n'existe pas
         $this->createIndex('idx-social_fund-member_id', 'social_fund', 'member_id');
-        $this->createIndex('idx-social_fund-exercise_id', 'social_fund', 'exercise_id');
 
         // Add foreign keys
         $this->addForeignKey(

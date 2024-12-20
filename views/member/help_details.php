@@ -77,7 +77,7 @@ $helpType = $help->helpType;
                     <p class="objective text-primary">Montant de l'aide : <?= $help->amount ?> XAF</p>
                     <h4 class="text-primary">Montant contribution : <?= $help->unit_amount ?> XAF / membre</h4>
                     <h4 class="text-secondary m-0 mt-4">Montant contributions perçus : </h4>
-                    <p class="contributed text-secondary"><?= $help->contributedAmount ?: 0 ?> XAF</p>
+                    <p class="contributed text-secondary"><?= $help->getContributedAmount() ?: 0 ?> XAF</p>
                 </div>
             </div>
 

@@ -80,11 +80,21 @@ class Help extends ActiveRecord
      * Calcul du montant total des contributions pour cette aide
      * @return float
      */
-    public function contributedAmount()
+    public function getContributedAmount()
     {
         return Contribution::find()
             ->where(['help_id' => $this->id, 'state' => true])
             ->sum('amount') ?: 0;
+    }
+
+    /**
+     * Définition de la propriété contributedAmount
+     * @return float
+     */
+    public function getContributedAmountAttribute()
+    {
+        // Logique pour calculer ou retourner la valeur
+        return $this->amount; // Exemple de retour, à adapter selon votre logique
     }
 
     /**
@@ -94,7 +104,7 @@ class Help extends ActiveRecord
     public function remainingAmount()
     {
         $helpType = $this->helpType();
-        return $helpType ? ($helpType->amount - $this->contributedAmount()) : 0;
+        return $helpType ? ($helpType->amount - $this->getContributedAmount()) : 0;
     }
 
     /**
@@ -103,6 +113,6 @@ class Help extends ActiveRecord
      */
     public function getDeficit()
     {
-        return $this->amount - $this->contributedAmount();
+        return $this->amount - $this->getContributedAmount();
     }
 }

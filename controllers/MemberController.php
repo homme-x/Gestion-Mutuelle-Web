@@ -7,6 +7,7 @@
  */
 
 namespace app\controllers;
+use app\managers\SettingManager; // Import correct de SettingManager
 
 use app\managers\MemberSessionManager;
 use app\models\BankAccount;
@@ -45,6 +46,8 @@ use app\models\TontineType;
 use yii\web\Response;
 use Stripe\Stripe;
 use Stripe\Charge;
+use app\models\FinancialAid;
+
 
 class MemberController extends Controller
 {
@@ -416,6 +419,19 @@ class MemberController extends Controller
         return $this->render('success');
     }
 
+
+    /************************************************* Action Dette ***************************************************************************************/
+    public function actionDette(){
+        $member = Member::findOne(Yii::$app->user->id);
+        $socialCrownTarget = SettingManager::getSocialCrown();
+
+        return $this->render('dette', [
+            'member' => $member,
+            'socialCrownTarget' => $socialCrownTarget,
+        ]);
+    }
+
+
     /*******************************************Type de Tontine********************************************************************************************/
 
 
@@ -557,4 +573,26 @@ class MemberController extends Controller
 >>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     }
 
+    public function actionDettes() {
+        MemberSessionManager::setDettes();
+        
+        $member = Member::findOne(Yii::$app->user->id);
+        $fondSocial = $member->social_crown;
+        
+        // Calcul des aides financières de l'année précédente
+        $currentYear = date('Y');
+        $totalAides = FinancialAid::find()
+            ->where(['member_id' => $member->id])
+            ->andWhere(['YEAR(date)' => $currentYear - 1])
+            ->sum('amount') ?? 0;
+            
+        $montantRenfouement = $fondSocial - $totalAides;
+        
+        return $this->render('dettes', [
+            'member' => $member,
+            'montantRenfouement' => $montantRenfouement,
+            'montantPaye' => 0, // À implémenter avec la vraie logique de paiement
+            'resteAPayer' => $montantRenfouement // À ajuster avec le montant déjà payé
+        ]);
+    }
 }

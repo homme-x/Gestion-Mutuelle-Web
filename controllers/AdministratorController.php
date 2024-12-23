@@ -1070,9 +1070,12 @@ class AdministratorController extends Controller
         $savings = Saving::find()->where(['member_id' => $member->id, 'session_id' => $session->id])->sum('amount');
         $maxBorrowingAmount = $this->calculateMaxBorrowingAmount($savings);
     
+        // Pour ajouter le pop up au message d'erreur
+        $model->checkBorrowingAmount($maxBorrowingAmount);
         if ($model->amount > $maxBorrowingAmount) {
-            $model->addError('amount', 'Le montant demandé est supérieur au montant maximum empruntable basé sur les épargnes de cette session : ' . $maxBorrowingAmount . ' XAF');
-            return $this->render("borrowings", compact("model", "sessions", "pagination"));
+            $errorMessage = 'Le montant demandé est supérieur au montant maximum empruntable basé sur les épargnes de cette session : ' . $maxBorrowingAmount . ' XAF';
+            $model->addError('amount', $errorMessage);
+            return $this->render("borrowings", compact("model", "sessions", "pagination", "errorMessage"));
         }
     
         $borrowing = new Borrowing();

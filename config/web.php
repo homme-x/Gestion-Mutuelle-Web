@@ -3,6 +3,10 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 $routes = require __DIR__ . '/routes.php';
+
+Yii::setAlias('@member.dette', '/member/dette');
+Yii::setAlias('@member.dettes', '/member/dettes'); // Remplace '/member/dettes' par l'URL réelle de ton action
+
 $config = [
     'id' => 'ensp-m',
     'name' => 'ensp-m',

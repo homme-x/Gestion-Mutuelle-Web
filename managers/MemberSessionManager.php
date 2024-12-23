@@ -7,7 +7,7 @@
  */
 
 namespace app\managers;
-
+use Yii;
 
 class MemberSessionManager
 {
@@ -63,10 +63,24 @@ class MemberSessionManager
         return \Yii::$app->session->get(self::place) == "administrators";
     }
 
+    /** Cette méthode retourne true si l’action en cours est dette, ce qui permet de surligner le lien en bleu lorsque l’utilisateur est sur cette page.**/
+    public static function isDette() {
+        return \Yii::$app->controller->action->id === 'dette';
+    }
+
+
     public static function isHelps() {
         return \Yii::$app->session->get(self::place) == "helps";
     }
 
+    public static function isDettes() {
+        return \Yii::$app->session->get(self::place) == "dettes";
+    }
+
+    public static function setDettes() {
+        \Yii::$app->session->set(self::place, "dettes");
+        \Yii::$app->session->set(self::head, null);
+    }
 
     public static function isAccueil() {
         return \Yii::$app->session->get(self::head) == "home";

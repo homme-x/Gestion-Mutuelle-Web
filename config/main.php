@@ -19,7 +19,7 @@
             '@app/migrations/m181222_175225_create_borrowing_saving_table',
             '@app/migrations/m181222_175405_create_borrowing_table',
             '@app/migrations/m181222_180233_create_exercise_table',
-            '@app/migrations/m181222_180245_create_session_table',
+            '@app//m181222_180245_create_session_table',
             '@app/migrations/m181222_180915_create_refund_table',
             '@app/migrations/m181222_181147_create_help_table',
             '@app/migrations/m181222_181745_create_contribution_table',

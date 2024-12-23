@@ -32,4 +32,18 @@ class Borrowing extends ActiveRecord
     public function member() {
         return Member::findOne($this->member_id);
     }
+
+    // Pour controler le maxBorrowingAmount
+    public function checkBorrowingAmount($maxBorrowingAmount) {
+        if ($this->amount > $maxBorrowingAmount) {
+            $errorMessage = 'Le montant demandé est supérieur au montant maximum empruntable basé sur les épargnes de cette session : ' . $maxBorrowingAmount . ' XAF';
+            echo "<script type='text/javascript'>
+                document.addEventListener('DOMContentLoaded', () => {
+                    event.preventDefault();
+                    alert('$errorMessage');
+                });
+            </script>";
+        }
+    }
 }
+

@@ -1,6 +1,8 @@
 <?php
 use app\managers\MemberSessionManager;
 use yii\helpers\Html;
+use app\models\FinancialAid;
+
 $this->title = "Mutuelle - ENSPY";
 ?>
 
@@ -102,11 +104,22 @@ $this->title = "Mutuelle - ENSPY";
                             <a href="<?= Yii::getAlias("@member.epargnes") ?>" class="nav-link waves-effect <?= MemberSessionManager::isEpargnes()?'blue-text':''?>" >Mes épargnes</a>
                         </li>
                         <li class="nav-item nav-separator">
+                            <a href="<?= Yii::getAlias("@member.dettes") ?>" class="nav-link waves-effect <?= MemberSessionManager::isDettes()?'blue-text':''?>" >
+                                <i class="fas fa-hand-holding-usd mr-1"></i>Mes dettes
+                            </a>
+                        </li>
+                        <li class="nav-item nav-separator">
                             <a href="<?= Yii::getAlias("@member.emprunts") ?>" class="nav-link waves-effect  <?= MemberSessionManager::isEmprunts()?'blue-text':''?>" >Mes emprunts</a>
                         </li>
                         <li class="nav-item nav-separator">
                             <a href="<?= Yii::getAlias("@member.contributions") ?>" class="nav-link waves-effect  <?= MemberSessionManager::isContributions()?'blue-text':''?>" >Mes contributions</a>
                         </li>
+
+                        
+                        <li class="nav-item nav-separator">
+                            <a href="<?= yii\helpers\Url::to(['/member/dette']) ?>" class="nav-link waves-effect <?= MemberSessionManager::isDette() ? 'blue-text' : '' ?>">Ma Dette</a>
+                        </li>
+
                         <li class="nav-item nav-separator">
                             <a class="nav-link waves-effect  <?= MemberSessionManager::isAides()?'blue-text':''?>" href="<?= Yii::getAlias("@member.helps") ?>">Aides</a>
                         </li>

@@ -27,6 +27,7 @@ class Tontine extends ActiveRecord
         return TontineType::findOne($this->tontine_type_id);
     }
 
+<<<<<<< HEAD
     /**
      * Vérifie si un membre est déjà inscrit à un type de tontine
      * @param int $member_id
@@ -39,4 +40,9 @@ class Tontine extends ActiveRecord
             ->where(['member_id' => $member_id, 'tontine_type_id' => $tontine_type_id])
             ->exists();
     }
+=======
+
+
+
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 }

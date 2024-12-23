@@ -273,4 +273,20 @@ $refunds = \app\models\Refund::find()->where(['is not','exercise_id',null])->all
             });
         });
     });
+<<<<<<< HEAD
+=======
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('form[data-max-fund]').forEach(form => {
+            form.addEventListener('submit', event => {
+                const input = form.querySelector('input[name="FixSocialCrownForm[fund]"]');
+                const maxSocialCrown = parseInt(form.dataset.maxSocialCrown , 10);
+
+                if (parseInt(input.value, 10) > maxSocialCrown ) {
+                    event.preventDefault();
+                    alert(`Le montant saisi dépasse le montant restant (${maxSocialCrown } XAF). Veuillez corriger.`);
+                }
+            });
+        });
+    });
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 </script>

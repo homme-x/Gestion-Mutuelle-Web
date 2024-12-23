@@ -33,6 +33,7 @@ $this->title = "Mutuelle - ENSPY";
 
             }
 
+<<<<<<< HEAD
             ul li {
             padding: 5px;
             margin: 5px;
@@ -42,6 +43,8 @@ $this->title = "Mutuelle - ENSPY";
             color: black;
             }
 
+=======
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
             .side-wrapper {
                 display: flex;
                 flex-direction: column;
@@ -69,7 +72,11 @@ $this->title = "Mutuelle - ENSPY";
     <!--Main Navigation-->
     <header>
         <!-- Navbar -->
+<<<<<<< HEAD
         <nav class="navbar fixed-top navbar-expand-lg navbar-light  scrolling-navbar blue-gradient">
+=======
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light  scrolling-navbar">
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
             <div class="container-fluid">
 
                 <!-- Brand -->

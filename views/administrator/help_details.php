@@ -102,7 +102,11 @@ $helpType = $help->helpType();
                     <h4 class="text-primary">Montant de contribution individuelle: <?= $help->unit_amount ?> XAF / membre</h4>
                     <h4 class="text-secondary m-0 mt-4">Montant de contributions perçues : </h4>
                     <p class="contributed text-secondary"><?= ($t=$help->contributedAmount())?$t:0 ?> XAF</p>
+<<<<<<< HEAD
                     <p class="objective text-primary">Déficit : <?= $help->deficit ?> XAF</p>
+=======
+                    <p class="objective text-primary">deficit : <?= $help->deficit() ?> XAF</p>
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                 </div>
             </div>
 
@@ -110,9 +114,16 @@ $helpType = $help->helpType();
                 <div class="col-12">
                     <h3 class="text-muted text-center">Détails</h3>
                     <?php
+<<<<<<< HEAD
                     $contributions = $help->contributions;
                     if (count($contributions)):
                     ?>
+=======
+                    $contributions = $help->contributions();
+                    if (count($contributions)):
+                    ?>
+
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                         <table class="table table-hover">
                             <thead class="blue-grey lighten-4">
                             <tr>
@@ -127,18 +138,29 @@ $helpType = $help->helpType();
                             </thead>
                             <tbody>
                             <?php foreach ($contributions as $index => $contribution): ?>
+<<<<<<< HEAD
                                 <?php 
                                 $m = $contribution->getMember()->one();
                                 $u = $m->user();
                                 $administrator = $contribution->getAdministrator()->one();
                                 $adminUser = $administrator ? $administrator->user() : null;
+=======
+                                <?php $m = $contribution->getMember();
+                                $u = $m->user();
+                                $administrator = $contribution->getAdministrator();
+                                $adminUser = $administrator->user();
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                                 ?>
                                 <tr>
                                     <th scope="row"><?= $index + 1 ?></th>
                                     <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
                                     <td class="blue-text"><?= (new DateTime($contribution->date))->format("d-m-Y")  ?></td>
                                     <td class="blue-text"><?= $contribution->amount ?></td>
+<<<<<<< HEAD
                                     <td class="text-capitalize"><?= $adminUser ? ($adminUser->name. ' '.$adminUser->first_name) : 'N/A' ?></td>
+=======
+                                    <td class="text-capitalize"><?= $adminUser->name. ' '.$adminUser->first_name ?></td>
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -150,11 +172,16 @@ $helpType = $help->helpType();
                     <?php
                     endif;
                     ?>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                     <?php
                     if ($help->state):
                     ?>
                         <h3 class="text-muted text-center mb-3">Membres n'ayant pas contribué</h3>
                         <div class="col-12 text-center">
+<<<<<<< HEAD
 
                         <div class="row">
                             <?php
@@ -162,6 +189,17 @@ $helpType = $help->helpType();
                                 $member = $contribution->member;
                                 $user = $member->user;
                             ?>
+=======
+            
+                        <div class="row">
+                            <?php
+                            foreach ($help->waitedContributions() as $contribution ):
+                                $member = new Contribution();
+                            $member =$contribution->getMember();
+                            $user = $member->user();
+                            ?>
+
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                             <div class="col-3">
                                 <div class="contribution">
                                     <img src="<?= \app\managers\FileManager::loadAvatar($user)?>" alt="<?= $user->name.' '.$user->first_name ?>">
@@ -217,6 +255,7 @@ foreach ($allActiveMembers as $key => $activeMem) {
 </thead>
 <tbody>
 <?php foreach ($allMembers as $index => $asMem): ?>
+<<<<<<< HEAD
     <?php 
     $m = Contribution::find()->where(['member_id'=>$asMem->id,'help_id'=>$help->id])->one();
     if ($m) {
@@ -248,6 +287,38 @@ foreach ($allActiveMembers as $key => $activeMem) {
     }
     endforeach; 
     ?>
+=======
+    <?php $m = Contribution::find()->where(['member_id'=>$asMem->id,'help_id'=>$help->id])->one();
+    $u = $asMem->user();
+    $asAdmin = $asMem->administrator();
+    $asAdminUser = $asAdmin->user();
+    $mleft = $help->unit_amount - $m->amount;
+    $mAmount = $m->amount;
+    $mStatus = ($mleft>=0)? true: false ;
+    $params = [
+        'q'=>$help->id,
+        'm'=>$m->member_id,
+    ]
+    ?>
+    <tr>
+        <th scope="row"><?= $index + 1 ?></th>
+        <td class="text-capitalize"><?= $u->name . " " . $u->first_name ?></td>
+        <td class="text-capitalize"><?= $asMem->active? 'actif' : 'non-actif' ?></td>
+        <td class="blue-text"><?= (new DateTime($m->date))->format("d-m-Y")  ?></td>
+        <td class="text-capitalize"><?= $m->amount ?></td>
+        <td class="text-capitalize"><?=$mStatus? $help->unit_amount - $m->amount : "already full"?></td>
+        <td class="text-capitalize">
+            <?= $m->member_id.'-'. $help->id?>
+            <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$m->member_id.http_build_query($params) ?>" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>contribuer</a>
+            <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$m->member_id.http_build_query($params) ?>" class="btn btn-danger btn-sm">annuler</a>
+
+    </td>
+        <!-- <a href="<?= Yii::getAlias("@administrator.new_contribution")."?q=".$help->id."&?m=".$help->member_id.http_build_query($params) ?>" class="btn btn-primary btn-add"><i class="fas fa-plus"></i>Ajouter une nouvelle contribution</a> -->
+
+        <td class="text-capitalize"><?= $asAdminUser->name. ' '.$asAdminUser->first_name ?></td>
+    </tr>
+<?php endforeach; ?>
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 </tbody>
 </table>
 

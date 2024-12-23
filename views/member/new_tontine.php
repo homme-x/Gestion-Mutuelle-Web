@@ -49,12 +49,17 @@ $user = $member->user;
             $form = ActiveForm::begin([
                 'method' => 'post',
                 'errorCssClass' => 'text-secondary',
+<<<<<<< HEAD
                 'action' => Yii::getAlias('@member.add_tontine'),  
+=======
+                'action' => '@member.add_tontine',
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                 'options' => ['class' => 'col-md-8 col-12 white-block']
             ]);
             ?>
             
             <?= $form->field($model, "tontine_type_id")->hiddenInput(['value' => $tontineType->id])->label(false) ?>
+<<<<<<< HEAD
             <div class="form-group">
                 <label>Type de la tontine</label>
                 <input type="text" class="form-control" value="<?= $tontineType->title . " - " . $tontineType->amount . ' XAF' ?>" readonly>
@@ -65,6 +70,12 @@ $user = $member->user;
                 <label>Nom du membre concerné par la cotisation Mensuelle</label>
                 <input type="text" class="form-control" value="<?= $user->name . " " . $user->first_name ?>" readonly>
             </div>
+=======
+            <?= $form->field($model, 'tontine_type_name')->textInput(['value' => $tontineType->title . " - " . $tontineType->amount . ' XAF', 'readonly' => true])->label("Type de la tontine") ?>
+
+            <?= $form->field($model, "member_id")->hiddenInput(['value' => $member->id])->label(false) ?>
+            <?= $form->field($model, 'member_name')->textInput(['value' => $user->name . " " . $user->first_name, 'readonly' => true])->label("Nom du membre concerné par la cotisation Mensuelle") ?>
+>>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 
             <?= $form->field($model, "limit_date")->input("date", ['required' => 'required'])->label("Date limite de contribution") ?>
 

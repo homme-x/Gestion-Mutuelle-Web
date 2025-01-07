@@ -57,10 +57,6 @@ Exercices
 
 </style>
 <?php $this->endBlock() ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 <div class="container mt-5 mb-5">
     <div class="row">
         <?php
@@ -69,20 +65,10 @@ Exercices
         $data = [];
         $colors = [];
         ?>
-<<<<<<< HEAD
         <?php if(count($exercises)):?>
             <?php
             $exercise = $exercises[0];
             $members = \app\models\Member::find()->all();  ?>
-=======
-
-        <?php if(count($exercises)):?>
-
-            <?php
-            $exercise = $exercises[0];
-            $members = \app\models\Member::find()->all();  ?>
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
             <div class="col-12 white-block mb-2">
                 <h1 class="text-muted text-center">Exercice de l'année <span class="blue-text"><?= $exercises[0]->year ?></span></h1>
                 <h3 class="text-secondary text-center"><?= $exercises[0]->active?"En cours":"Terminé" ?></h3>
@@ -106,10 +92,6 @@ Exercices
                     <?php
                     endif;
                     ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                     <div class="col-md-4 p-1 d-flex ">
                         <div class="white-block d-flex flex-row">
                             <div class="bl b-amount ml-4 mr-4">
@@ -164,14 +146,9 @@ Exercices
                             <th>Montant emprunté</th>
                             <th>Dette remboursée</th>
                             <th>Intérêt sur les dettes</th>
-<<<<<<< HEAD
                             <th>Fond Social</th>
                             <th>Inscription</th>
                             <th>Renflouement</th>
-=======
-                            <th>Inscription</th>
-                            <th>renflouement</th>
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 
                         </tr>
                         </thead>
@@ -197,10 +174,7 @@ Exercices
                                 <td><?= $refundedAmount?$refundedAmount:0 ?> XAF</td>
                                 <td class="blue-text"><?= $interest ?> XAF</td>
                                 <td class="blue-text"><?= $insc ?> XAF</td>
-<<<<<<< HEAD
                                 <td class="blue-text"><?= $sc ?> XAF</td>
-=======
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
                                 <td class="blue-text"><?= \app\managers\SettingManager::getSocialCrown()-$sc ?> XAF</td>
                                 </tr>
                         <?php endforeach; ?>
@@ -228,19 +202,11 @@ Exercices
             </div>
 
         <?php else: ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
             <div class="col-12 white-block">
                 <h1 class="text-center text-muted">Aucun exercice créé.</h1>
             </div>
 
         <?php endif; ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     </div>
 </div>
 
@@ -265,10 +231,6 @@ Exercices
     }
 
     ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     //line
     var ctxL = document.getElementById("lineChart").getContext('2d');
     var myLineChart = new Chart(ctxL, {
@@ -294,10 +256,6 @@ Exercices
     });
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     var ctxP = document.getElementById("pieChart").getContext('2d');
     var myPieChart = new Chart(ctxP, {
         type: 'pie',

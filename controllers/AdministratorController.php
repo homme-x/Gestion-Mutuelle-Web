@@ -17,11 +17,13 @@ use app\managers\RedirectionManager;
 use app\managers\SettingManager;
 use app\models\Administrator;
 use app\models\Agape;
+use app\models\Agape3;
 use app\models\Borrowing;
 use app\models\BorrowingSaving;
 use app\models\Contribution;
 use app\models\ContributionTontine;
 use app\models\Exercise;
+use app\models\forms\FixInscriptionForm;
 use app\models\forms\HelpTypeForm;
 use app\models\forms\IdForm;
 use app\models\forms\NewAdministratorForm;
@@ -50,14 +52,12 @@ use app\models\User;
 use DateTime;
 use Yii;
 use yii\base\Security;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\web\Controller;
-use yii\web\UploadedFile;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
-use app\models\Agape3;
-use app\models\forms\FixInscriptionForm;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 class AdministratorController extends Controller
 {
@@ -703,7 +703,6 @@ class AdministratorController extends Controller
                     $member->inscription = 0;
                     $member->save();
 
-
                     //Au depart il n'y avait pas ça la partie de l'email n'avait pas le try catch c'est parce que je n'ai pas la connexion que je met  ça dedans
                     // C'est pour tester la partie du membre
                     try {
@@ -770,7 +769,6 @@ class AdministratorController extends Controller
             ->limit($pagination->limit)
             ->all();
 
-
         return $this->render("savings", compact("model", "sessions", "pagination"));
     }
 
@@ -831,7 +829,7 @@ class AdministratorController extends Controller
     //                                 ->setHtmlBody('Nouvelle Epargne')
     //                                 ->send();
 
-    //                             }catch(\Exception $message){
+    //                             }catch(\Exception $message {
 
     //                             }
     //                     }
@@ -923,8 +921,7 @@ class AdministratorController extends Controller
     }
 
 
-    /*********************************action sur les recherche de sessions **************************************************** */
-
+    /*********************************action sur les recherche de sessions *****************************************************/
 
     /*********************************action sur les remboursements **************************************************** */
     public function actionRemboursements()
@@ -1237,7 +1234,7 @@ class AdministratorController extends Controller
                 Yii::$app->db->createCommand('UPDATE borrowing SET interest=interest+:val WHERE session_id!=:session_id AND state=1 ', [
                     ':val' => SettingManager::getInterest(),
                     ':session_id' => $session->id,
-                ])->execute();
+                ])->execute
 
 
                 $members = Member::find()->all();
@@ -1433,7 +1430,7 @@ class AdministratorController extends Controller
             return RedirectionManager::abort($this);
     }
 
-    /****************************epargne des membres de la mutuelle******************************************************************* */
+    /*******************************epargne des membres de la mutuelle******************************************************************* */
     public function actionEpargneMembre($q = 0)
     {
         if ($q) {
@@ -1665,7 +1662,7 @@ class AdministratorController extends Controller
                         $contribution->administrator_id = $this->administrator->id;
                         $contribution->save(false);
 
-                        if ($help->contributedAmount() >= $help->amount) {
+                        if ($help->contributedAmount == $help->amount) {
                             $help->state = false;
                             $help->save();
                         }
@@ -1692,6 +1689,7 @@ class AdministratorController extends Controller
     }
 
     /******************************aide du côté Administrateur *************************************************** */
+
     public function actionAides()
     {
         AdministratorSessionManager::setHome("help");
@@ -2046,8 +2044,7 @@ public function actionReglerFondSocial($id)
 
         // Retrieve the sessions for the current exercice
         $sessions = Session::find()->where(['exercise_id' => $exercise->id])->all();
-
-
+    
         if ($agapeForm->load(Yii::$app->request->post())) {
             // Check if a session is selected
             if (empty($agapeForm->session_id)) {
@@ -2061,8 +2058,7 @@ public function actionReglerFondSocial($id)
                 } elseif ($agapeForm->validate()) {
                     // No existing Agape3 record found, and the model passes validation
                     $agapeForm->save();
-
-
+    
                     return $this->redirect(['@administrator.agape']);
                 }
             }
@@ -2122,10 +2118,7 @@ public function actionReglerFondSocial($id)
 
 
 
-
-
     /*******************************************Type de Tontine********************************************************************************************/
-
 
     public function actionTypesTontine()
     {
@@ -2269,12 +2262,12 @@ public function actionReglerFondSocial($id)
         if (!Yii::$app->request->getIsPost()) {
             return RedirectionManager::abort($this);
         }
-
+    
         $model = new NewTontineForm();
         if (!$model->load(Yii::$app->request->post()) || !$model->validate()) {
             return $this->render("new_tontine", compact("model"));
         }
-
+    
         $member = Member::findOne($model->member_id);
         $tontine_type = TontineType::findOne($model->tontine_type_id);
 
@@ -2390,7 +2383,7 @@ public function actionReglerFondSocial($id)
                         MailManager::alert_contributeur($member->user(), $member, $help);
                     }
 
-                    if ($tontine->contributedAmount() == $tontine->amount) {
+                    if ($tontine->contributedAmount == $tontine->amount) {
                         $tontine->state = false;
                         $tontine->save();
 
@@ -2417,7 +2410,6 @@ public function actionReglerFondSocial($id)
 
 
     /******************************aide du côté Administrateur *************************************************** */
-
 
     public function actionAppliquerModificationTypeTontine()
     {

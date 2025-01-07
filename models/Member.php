@@ -8,10 +8,6 @@
 
 namespace app\models;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 use app\managers\FinanceManager;
 use yii\db\ActiveRecord;
 
@@ -60,7 +56,6 @@ class Member extends ActiveRecord
         return Refund::find()->where(['borrowing_id' => $borrowings ])->sum("amount");
     }
 
-<<<<<<< HEAD
     public function calculateTotalBorrowingSavings($borrowingSavings)
     {
         $sum = 0;
@@ -78,28 +73,11 @@ class Member extends ActiveRecord
         }
         return $sum;
     }
-=======
-    // public function interest(Exercise $exercise) {
-    //     $sessions = Session::find()->select('id')->where(['exercise_id' => $exercise->id])->column();
-    //     $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
-    //     $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
-
-
-    //     $sum = 0;
-    //     foreach($borrowingSavings as $borrowingSaving){
-    //         $percent = $borrowingSaving->percent;
-    //         $borrowing = Borrowing::findOne($borrowingSaving->borrowing_id);
-    //         $sum += ($percent/100.0)* (FinanceManager::intendedAmountFromBorrowing($borrowing)-$borrowing->amount );
-    //     }
-    //     return $sum;
-    // }
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
 
     public function interest(Exercise $exercise) {
         $sessions = Session::find()->select('id')->where(['exercise_id' => $exercise->id])->column();
         $savings = Saving::find()->select('id')->where(['member_id' => $this->id,'session_id' => $sessions])->column();
         $borrowingSavings = BorrowingSaving::find()->where(['saving_id' => $savings])->all();
-<<<<<<< HEAD
         return $this->calculateTotalBorrowingSavings($borrowingSavings);
     }
 
@@ -123,17 +101,6 @@ class Member extends ActiveRecord
     {
         $socialFund = SocialFund::findOne(['member_id' => $this->id, 'exercise_id' => $exercise->id]);
         return $socialFund ? $socialFund->amount : 0;
-=======
-
-
-        $sum = 0;
-        foreach($borrowingSavings as $borrowingSaving){
-            $percent = $borrowingSaving->percent;
-            $borrowing = Borrowing::findOne($borrowingSaving->borrowing_id);
-            $sum += ($percent/100.0)* (FinanceManager::intendedAmountFromBorrowing($borrowing)-$borrowing->amount );
-        }
-        return $sum;
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     }
 
     public function administrator() {

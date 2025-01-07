@@ -132,8 +132,4 @@ class SiteController extends Controller
 
 
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)

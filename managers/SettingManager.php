@@ -8,53 +8,106 @@
 
 namespace app\managers;
 
-
 class SettingManager
 {
-    public static function getInterest() {
-        $json_source = file_get_contents(\Yii::$app->getBasePath().'/managers/app.json');
-        $data = json_decode($json_source,true);
-        return $data['interest'];
+    /**
+     * Retrieve the "interest" value from the app.json file.
+     */
+    public static function getInterest()
+    {
+        return self::getJsonValue('app.json', 'interest');
     }
 
-    public static function getSocialCrown() {
-        $json_source = file_get_contents(\Yii::$app->getBasePath().'/managers/app.json');
-        $data = json_decode($json_source,true);
-
-        return $data['social_crown'];
+    /**
+     * Retrieve the "social_crown" value from the app.json file.
+     */
+    public static function getSocialCrown()
+    {
+        return self::getJsonValue('app.json', 'social_crown');
     }
 
-    public static function getInscription() {
-        $json_source = file_get_contents(\Yii::$app->getBasePath().'/managers/app.json');
-        $data = json_decode($json_source,true);
-
-        return $data['inscription'];
+    /**
+     * Retrieve the "inscription" value from the app.json file.
+     */
+    public static function getInscription()
+    {
+        return self::getJsonValue('app.json', 'inscription');
     }
 
-    public static function getAgape() {
-        $json_source = file_get_contents(\Yii::$app->getBasePath().'/managers/app2.json');
-        $data = json_decode($json_source,true);
-
-        return $data['amount'];
+    /**
+     * Retrieve the "amount" value from the app2.json file.
+     */
+    public static function getAgape()
+    {
+        return self::getJsonValue('app2.json', 'amount');
     }
 
-    public static function setValues($interest,$social_crown,$inscription) {
+    /**
+     * Update the app.json file with new values for interest, social_crown, and inscription.
+     */
+    public static function setValues($interest, $social_crown, $inscription)
+    {
         $data = [
-            'interest'=>$interest,
-            'social_crown'=>$social_crown,
-            'inscription'=>$inscription,
+            'interest' => $interest,
+            'social_crown' => $social_crown,
+            'inscription' => $inscription,
         ];
 
-        file_put_contents(\Yii::$app->getBasePath().'/managers/app.json',json_encode($data));
-
+        self::writeJsonData('app.json', $data);
     }
 
-    public static function setvaluesAgape($amount){
+    /**
+     * Update the app2.json file with a new amount value.
+     */
+    public static function setValuesAgape($amount)
+    {
         $data = [
-            'amount'=> $amount,
+            'amount' => $amount,
         ];
 
-        file_put_contents(\Yii::$app->getBasePath().'/managers/app2.json',json_encode($data));
+        self::writeJsonData('app2.json', $data);
+    }
 
+    /**
+     * Retrieve a value from a JSON file.
+     */
+    private static function getJsonValue($fileName, $key)
+    {
+        $filePath = \Yii::$app->getBasePath() . '/managers/' . $fileName;
+
+        if (!file_exists($filePath)) {
+            throw new \Exception("File not found: $filePath");
+        }
+
+        $json_source = file_get_contents($filePath);
+        $data = json_decode($json_source, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception("Error decoding JSON from file: $filePath");
+        }
+
+        if (!array_key_exists($key, $data)) {
+            throw new \Exception("Key '$key' not found in file: $filePath");
+        }
+
+        return $data[$key];
+    }
+
+    /**
+     * Write data to a JSON file.
+     */
+    private static function writeJsonData($fileName, $data)
+    {
+        $filePath = \Yii::$app->getBasePath() . '/managers/' . $fileName;
+
+        $json_data = json_encode($data, JSON_PRETTY_PRINT);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception("Error encoding JSON data for file: $filePath");
+        }
+
+        if (file_put_contents($filePath, $json_data) === false) {
+            throw new \Exception("Failed to write to file: $filePath");
+        }
     }
 }

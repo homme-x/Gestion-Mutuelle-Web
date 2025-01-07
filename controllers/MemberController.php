@@ -448,40 +448,15 @@ class MemberController extends Controller
     {
         MemberSessionManager::setHome("tontine");
         $model = new NewTontineForm();
-<<<<<<< HEAD
         return $this->render('new_tontine', [
             'model' => $model,
         ]);
-=======
-        return $this->render("new_Tontine", compact("model"));
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     }
 
 
 /********************************ajouter une tontine ********************************************************** */
     public function actionAjouterTontine()
     {
-<<<<<<< HEAD
-        $model = new NewTontineForm();
-        
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $tontine = new Tontine();
-            $tontine->member_id = $model->member_id;
-            $tontine->tontine_type_id = $model->tontine_type_id;
-            $tontine->comments = $model->comments;
-            $tontine->limit_date = $model->limit_date;
-            $tontine->created_at = date('Y-m-d H:i:s');
-            $tontine->state = true;
-            
-            if ($tontine->save()) {
-                Yii::$app->session->setFlash('success', 'Votre inscription à la tontine a été enregistrée avec succès.');
-                return $this->redirect(['member/tontine-types']);
-            }
-        }
-        
-        Yii::$app->session->setFlash('error', 'Une erreur est survenue lors de l\'enregistrement de votre inscription.');
-        return $this->redirect(['member/tontine-types']);
-=======
         if (!Yii::$app->request->getIsPost()) {
             return RedirectionManager::abort($this);
         }
@@ -570,7 +545,6 @@ class MemberController extends Controller
                 MailManager::alert_contributeur($member->user(), $member, $help);
             }
         }
->>>>>>> 46a6216 (Il manque quelques détails à ajuster sinon c'est déja presque bon.)
     }
 
     public function actionDettes() {

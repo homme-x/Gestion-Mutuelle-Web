@@ -26,6 +26,15 @@ $user = $member->user();
         .labels .col-7 {
             color: dodgerblue;
         }
+        
+        .labels .col-7 a {
+            color: dodgerblue;
+            text-decoration: none;
+        }
+        
+        .labels .col-7 a:hover {
+            text-decoration: underline;
+        }
     </style>
 <?php $this->endBlock()?>
 <div class="container mt-5 mb-5">
@@ -54,13 +63,21 @@ $user = $member->user();
                     Téléphone
                 </div>
                 <div class="col-7">
-                    <?= $user->tel ?>
+                    <?php if (!empty($user->tel)): ?>
+                        <a href="tel:<?= str_replace(' ', '', $user->tel) ?>"><?= $user->tel ?></a>
+                    <?php else: ?>
+                        <span class="text-secondary">Non renseigné</span>
+                    <?php endif; ?>
                 </div>
                 <div class="col-5">
                     Email
                 </div>
                 <div class="col-7">
-                    <?= $user->email ?>
+                    <?php if (!empty($user->email)): ?>
+                        <a href="mailto:<?= $user->email ?>"><?= $user->email ?></a>
+                    <?php else: ?>
+                        <span class="text-secondary">Non renseigné</span>
+                    <?php endif; ?>
                 </div>
                 <div class="col-5">
                     Adresse
